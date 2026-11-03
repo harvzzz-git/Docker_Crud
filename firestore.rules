@@ -1,0 +1,30 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function temporaryLabAccess() {
+      return request.time < timestamp.date(2026, 10, 20);
+    }
+
+    function validBook(book) {
+      return book.keys().hasAll(['title', 'author', 'genre', 'isbn', 'status'])
+        && book.keys().hasOnly(['title', 'author', 'genre', 'isbn', 'status', 'order'])
+        && book.title is string
+        && book.title.size() <= 200
+        && book.author is string
+        && book.author.size() <= 200
+        && book.genre is string
+        && book.genre.size() <= 100
+        && book.isbn is string
+        && book.isbn.size() <= 32
+        && book.status in ['To Read', 'Reading', 'Finished']
+        && (!('order' in book) || (book.order is int && book.order >= 0));
+    }
+
+    match /books/{bookId} {
+      allow read: if temporaryLabAccess();
+      allow create, update: if temporaryLabAccess() && validBook(request.resource.data);
+      allow delete: if temporaryLabAccess() && validBook(resource.data);
+    }
+  }
+}

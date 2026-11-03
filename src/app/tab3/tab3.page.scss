@@ -1,0 +1,35 @@
+.about {
+  margin-top: 1.5rem;
+}
+
+.eyebrow {
+  color: var(--ion-color-primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+h1 {
+  margin: 0.35rem 0;
+  font-size: 2rem;
+  font-weight: 750;
+}
+
+.about > p:not(.eyebrow) {
+  color: var(--ion-color-medium);
+}
+
+ion-list {
+  margin: 1rem 0;
+}
+
+ion-card {
+  margin: 1rem 0;
+  border-radius: 16px;
+}
+
+ion-note {
+  display: block;
+  margin: 1.25rem 0.25rem;
+  line-height: 1.5;
+}

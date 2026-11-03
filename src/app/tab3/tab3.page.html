@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>About BookShelf</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <section class="about">
+    <p class="eyebrow">PROJECT DATA MODEL</p>
+    <h1>Book collection</h1>
+    <p>Each book record includes these fields:</p>
+    <ion-list inset>
+      <ion-item><ion-label><strong>Title</strong><p>Book name</p></ion-label></ion-item>
+      <ion-item><ion-label><strong>Author</strong><p>Writer’s name</p></ion-label></ion-item>
+      <ion-item><ion-label><strong>Genre</strong><p>Book category</p></ion-label></ion-item>
+      <ion-item><ion-label><strong>ISBN</strong><p>Unique publication identifier</p></ion-label></ion-item>
+      <ion-item><ion-label><strong>Status</strong><p>To Read, Reading, or Finished</p></ion-label></ion-item>
+    </ion-list>
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Features</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        Search, status filters, edit/delete confirmations, toast messages, loading indicators,
+        pull-to-refresh, and drag-to-reorder are built into the app.
+      </ion-card-content>
+    </ion-card>
+    <ion-note color="medium">
+      Books are saved in Firebase Realtime Database and are available across devices connected to
+      this project.
+    </ion-note>
+  </section>
+</ion-content>

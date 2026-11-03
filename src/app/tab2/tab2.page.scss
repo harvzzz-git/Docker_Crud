@@ -1,0 +1,59 @@
+.list-heading {
+  padding-top: 1.25rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.35rem;
+  color: var(--ion-color-primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+h1 {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 750;
+}
+
+ion-searchbar {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+ion-segment {
+  padding: 0 0.75rem 0.5rem;
+}
+
+ion-reorder-group {
+  margin-top: 0.25rem;
+}
+
+ion-item h2 {
+  margin-bottom: 0.35rem;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+ion-item p {
+  margin-bottom: 0.5rem;
+  color: var(--ion-color-medium);
+  font-size: 0.82rem;
+}
+
+ion-badge {
+  font-weight: 600;
+}
+
+.empty-state {
+  margin: 1.5rem 1rem;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.empty-state p {
+  color: var(--ion-color-medium);
+}

@@ -1,0 +1,74 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>BookShelf</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <section class="intro">
+    <p class="eyebrow">YOUR PERSONAL LIBRARY</p>
+    <h1>Add a book</h1>
+    <p>Keep the books you love and the ones you’re about to read in one place.</p>
+  </section>
+
+  <ion-card>
+    <ion-card-content>
+      <ion-list lines="full">
+        <ion-item>
+          <ion-input
+            label="Book title"
+            labelPlacement="stacked"
+            placeholder="e.g. The Hobbit"
+            [(ngModel)]="newBook.title"
+            required
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input
+            label="Author"
+            labelPlacement="stacked"
+            placeholder="e.g. J. R. R. Tolkien"
+            [(ngModel)]="newBook.author"
+            required
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-select
+            label="Genre"
+            labelPlacement="stacked"
+            placeholder="Choose a genre"
+            [(ngModel)]="newBook.genre"
+          >
+            <ion-select-option value="Fantasy">Fantasy</ion-select-option>
+            <ion-select-option value="Fiction">Fiction</ion-select-option>
+            <ion-select-option value="Mystery">Mystery</ion-select-option>
+            <ion-select-option value="Non-fiction">Non-fiction</ion-select-option>
+            <ion-select-option value="Romance">Romance</ion-select-option>
+            <ion-select-option value="Science fiction">Science fiction</ion-select-option>
+            <ion-select-option value="Other">Other</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-input
+            label="ISBN"
+            labelPlacement="stacked"
+            placeholder="e.g. 9780547928227"
+            [(ngModel)]="newBook.isbn"
+            required
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-select label="Reading status" labelPlacement="stacked" [(ngModel)]="newBook.status">
+            <ion-select-option *ngFor="let status of statuses" [value]="status">
+              {{ status }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-list>
+
+      <ion-button expand="block" class="save-button" (click)="addBook()">
+        Add to my library
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

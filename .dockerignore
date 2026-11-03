@@ -1,0 +1,7 @@
+node_modules
+.angular
+.ionic
+www
+dist
+coverage
+.git
