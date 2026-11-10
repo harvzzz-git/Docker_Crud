@@ -1,4 +1,4 @@
-FROM node:24-alpine
+FROM node:24-alpine AS build
 
 WORKDIR /app
 
@@ -6,7 +6,11 @@ COPY package*.json ./
 RUN npm ci --legacy-peer-deps
 
 COPY . .
+RUN npm run build
 
-EXPOSE 8100
+FROM nginx:1.29-alpine
 
-CMD ["npm", "start", "--", "--host", "0.0.0.0", "--port", "8100"]
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/www/ /usr/share/nginx/html/
+
+EXPOSE 80

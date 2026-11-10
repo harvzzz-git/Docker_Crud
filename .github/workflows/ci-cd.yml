@@ -13,7 +13,7 @@ permissions:
 jobs:
   continuous-integration:
     name: Continuous Integration
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout source code
@@ -34,40 +34,47 @@ jobs:
       - name: Build application
         run: npm run build
 
-  continuous-deployment:
-    name: Continuous Deployment
+  publish-container:
+    name: Publish Docker image
     needs: continuous-integration
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
-    runs-on: [self-hosted, Windows, X64]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
 
     steps:
-      - name: Checkout latest code
+      - name: Checkout source code
         uses: actions/checkout@v4
 
-      - name: Build Docker image
-        run: docker build -t ionic-crud:latest .
+      - name: Normalize image name
+        id: image
+        run: echo "name=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_OUTPUT"
 
-      - name: Remove previous container
-        run: docker rm -f ionic-crud
-        continue-on-error: true
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ steps.image.outputs.name }}
+          tags: |
+            type=ref,event=branch
+            type=sha,prefix=sha-
+            type=raw,value=latest,enable={{is_default_branch}}
 
-      - name: Start updated container
-        run: docker run -d --name ionic-crud --restart unless-stopped -p 8100:8100 ionic-crud:latest
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-      - name: Verify application
-        shell: powershell
-        run: |
-          $success = $false
-          for ($i = 1; $i -le 15; $i++) {
-            try {
-              Invoke-WebRequest http://localhost:8100/ -UseBasicParsing -TimeoutSec 2 | Out-Null
-              $success = $true
-              break
-            } catch {
-              Start-Sleep -Seconds 2
-            }
-          }
-          if (-not $success) {
-            docker logs ionic-crud
-            exit 1
-          }
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and publish Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}

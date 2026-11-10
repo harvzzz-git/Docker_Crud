@@ -1,10 +1,9 @@
 export const firebaseConfig = {
-  apiKey: 'AIzaSyBUIrjUj8pW8bafGHeBUtHB-sf9RQRDuac',
-  authDomain: 'trialnumb1-3061f.firebaseapp.com',
-  databaseURL: 'https://trialnumb1-3061f-default-rtdb.firebaseio.com',
-  projectId: 'trialnumb1-3061f',
-  storageBucket: 'trialnumb1-3061f.firebasestorage.app',
-  messagingSenderId: '98778244169',
-  appId: '1:98778244169:web:4b41ff58f81b859a218b98',
-  measurementId: 'G-XJFC6J7PDP',
+  apiKey: 'AIzaSyByRr_ZaIbyhXuuSg_i3MJX6CAmf4cEAGQ',
+  authDomain: 'crud-harvey.firebaseapp.com',
+  projectId: 'crud-harvey',
+  storageBucket: 'crud-harvey.firebasestorage.app',
+  messagingSenderId: '767927798714',
+  appId: '1:767927798714:web:d98e1074c8f1a83599ab83',
+  measurementId: 'G-6BH7LD8TQ2',
 };

@@ -5,3 +5,4 @@ www
 dist
 coverage
 .git
+actions-runner

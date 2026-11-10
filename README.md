@@ -20,16 +20,15 @@ docker build -t ionic-crud .
 docker images ionic-crud
 ```
 
-Record the `ionic-crud` image's tag, image ID, and size from the output. Then start it:
+This builds the production Angular app and serves it with Nginx. Start it:
 
 ```bash
-docker run -d -p 8100:8100 --name ionic-crud-container ionic-crud
+docker run -d -p 8100:80 --name ionic-crud-container ionic-crud
 docker ps
 ```
 
-Open `http://localhost:8100` and test adding, editing, deleting, and refreshing books.
-These operations require Realtime Database rules that allow read and write access, as described
-below. When finished, stop and remove the container; this does not remove the image:
+Open `http://localhost:8100` and test adding, editing, deleting, and refreshing books. When
+finished, stop and remove the container; this does not remove the image:
 
 ```bash
 docker stop ionic-crud-container
@@ -40,31 +39,34 @@ docker images ionic-crud
 ## CI/CD with GitHub Actions
 
 The workflow in `.github/workflows/ci-cd.yml` runs tests and a production build
-on a GitHub-hosted Windows runner for pushes and pull requests targeting `main`.
-After those checks pass, pushes to `main` and manually dispatched runs build and
-deploy the Docker image on a Windows self-hosted runner. Pull requests run CI only.
+for pushes and pull requests targeting `main`. After those checks pass, pushes
+to the default branch and manually dispatched runs build and publish the
+container to GitHub Container Registry (GHCR). Pull requests run CI only.
+Publishing uses the workflow's `GITHUB_TOKEN`; no registry password or runner
+registration token is needed.
 
-To enable deployment:
+The image is tagged with the branch name and commit SHA; `latest` is also
+published from the default branch. For this repository, the image is
+`ghcr.io/harvzzz-git/docker_crud`. You can run it locally with:
 
-1. Push this project to a GitHub repository with its default branch named `main`.
-2. In **Settings → Actions → Runners**, add a **Windows x64** self-hosted runner
-   and configure it using the temporary command and token GitHub provides.
-   Keep the runner online and ensure Docker Desktop is running for deployments.
-3. Push a change to `main`, or start **CI/CD Pipeline** from the repository's
-   **Actions** tab. The deployed app is available at `http://localhost:8100` on
-   the runner computer.
+```bash
+docker pull ghcr.io/harvzzz-git/docker_crud:latest
+docker run --rm -p 8100:80 ghcr.io/harvzzz-git/docker_crud:latest
+```
 
-Never put the runner registration token in the repository or workflow file.
+GitHub may keep the package private initially. Change the package's visibility
+in its GHCR package settings if it should be publicly pullable.
 
-## Firebase Realtime Database
+## Firebase Cloud Firestore
 
-Book records are stored under the `books` path in the configured Firebase Realtime Database.
-Before running the app, enable Realtime Database for the Firebase project and configure its
-rules to allow this app to read and write that path. This project does not currently implement
-sign-in, so authenticated-only rules will reject its requests. For a classroom demo, use a
-separate test database with temporary rules and do not deploy those rules publicly. Add Firebase
-Authentication and restrictive Security Rules before production use. The Firebase web
-configuration is included in the frontend and is not a private credential.
+Book records are stored in the `books` Cloud Firestore collection. The app is
+configured for the `crud-harvey` Firebase project. Enable Cloud Firestore there
+and configure its rules before using the app. The checked-in `firestore.rules`
+contains a temporary unauthenticated lab rule that expired on October 20, 2026;
+do not extend public access for production. This app does not currently implement
+sign-in, so use an appropriate test-only ruleset or add Firebase Authentication
+and restrictive rules before production use. The Firebase web configuration is
+included in the frontend and is not a private credential.
 
 ## Book data model
 
@@ -74,4 +76,4 @@ them in **My Library**.
 
 The app includes Ionic search, segment filters, an edit modal, delete confirmations, toast and
 loading feedback, pull-to-refresh, sliding delete actions, and drag-to-reorder. Create, read,
-update, delete, and ordering changes are synchronized with Firebase Realtime Database.
+update, delete, and ordering changes are synchronized with Firebase Cloud Firestore.
