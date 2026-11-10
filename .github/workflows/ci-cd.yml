@@ -55,7 +55,7 @@ jobs:
           }
 
       - name: Deploy Updated Container
-        run: docker run -d --name ionic-crud --restart unless-stopped -p 8100:8100 ionic-crud:latest
+        run: docker run -d --name ionic-crud --restart unless-stopped -p 8100:80 ionic-crud:latest
 
       - name: Verify Deployment
         shell: powershell
