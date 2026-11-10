@@ -39,23 +39,22 @@ docker images ionic-crud
 ## CI/CD with GitHub Actions
 
 The workflow in `.github/workflows/ci-cd.yml` runs tests and a production build
-for pushes and pull requests targeting `main`. After those checks pass, pushes
-to the default branch and manually dispatched runs build and publish the
-container to GitHub Container Registry (GHCR). Pull requests run CI only.
-Publishing uses the workflow's `GITHUB_TOKEN`; no registry password or runner
-registration token is needed.
+on a GitHub-hosted Windows runner for pushes and pull requests targeting `main`.
+After CI succeeds, pushes to `main` and manually dispatched runs deploy the
+Docker container to a Windows self-hosted runner. Pull requests run CI only.
 
-The image is tagged with the branch name and commit SHA; `latest` is also
-published from the default branch. For this repository, the image is
-`ghcr.io/harvzzz-git/docker_crud`. You can run it locally with:
+To enable deployment:
 
-```bash
-docker pull ghcr.io/harvzzz-git/docker_crud:latest
-docker run --rm -p 8100:80 ghcr.io/harvzzz-git/docker_crud:latest
-```
-
-GitHub may keep the package private initially. Change the package's visibility
-in its GHCR package settings if it should be publicly pullable.
+1. In the GitHub repository, open **Settings → Actions → Runners** and add a
+   **Windows x64** self-hosted runner. Configure it using the temporary
+   instructions and registration token provided by GitHub; never put the token
+   in this repository.
+2. Keep the runner online and make sure Docker Desktop is running on its
+   computer. The account running the runner must be able to use Docker.
+3. Push a change to `main`, or start **CI/CD Pipeline** from the repository's
+   **Actions** tab. After CI passes, the workflow replaces the `ionic-crud`
+   container and serves the app at `http://localhost:8100` on the runner
+   computer.
 
 ## Firebase Cloud Firestore
 
